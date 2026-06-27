@@ -1,29 +1,35 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"; 
 function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
-  try {
-    const response = await axios.post("http://localhost:5000/register", {
-      fullName,
-      email,
-      username,
-      password,
-      confirmPassword,
-    });
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-    console.log(response.data);
-    alert("Registration Successful!");
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/register",
+      {
+        fullName,
+        email,
+        username,
+        password,
+      }
+    );
+
+    alert(response.data.message);
   } catch (error) {
     console.error(error);
-    alert("Registration Failed!");
+    alert("Registration failed");
   }
 };
   return (
