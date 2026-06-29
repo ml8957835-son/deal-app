@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function Home() {
   const [deals, setDeals] = useState([]);
-
+const navigate = useNavigate();
 useEffect(() => {
   fetchDeals();
 }, []);
@@ -114,10 +115,12 @@ setDeals(response.data.deals);
 
       </div>
 
-      <button className="mt-6 w-full rounded-xl bg-blue-600 py-3 font-semibold hover:bg-blue-700">
-        View Deal
-      </button>
-
+      <button
+  onClick={() => navigate(`/deal/${deal.id}`)}
+  className="mt-6 w-full rounded-xl bg-blue-600 py-3 font-semibold hover:bg-blue-700"
+>
+  View Deal
+</button>
     </div>
 
   ))}

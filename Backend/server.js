@@ -131,6 +131,25 @@ app.get("/deals", (req, res) => {
     });
   }
 });
+app.get("/deals/:id", (req, res) => {
+  const { id } = req.params;
+
+  const deal = db
+    .prepare("SELECT * FROM deals WHERE id = ?")
+    .get(id);
+
+  if (!deal) {
+    return res.status(404).json({
+      success: false,
+      message: "Deal not found",
+    });
+  }
+
+  res.json({
+    success: true,
+    deal,
+  });
+});
 app.delete("/deals/:id", (req, res) => {
   const { id } = req.params;
 
