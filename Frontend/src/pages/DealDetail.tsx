@@ -6,7 +6,7 @@ function DealDetail() {
   const { id } = useParams();
 
   const [deal, setDeal] = useState<any>(null);
-
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   useEffect(() => {
     fetchDeal();
   }, []);
@@ -22,7 +22,24 @@ function DealDetail() {
       console.error(error);
     }
   };
+  const handleClaimDeal = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/claims",
+      {
+        userId: user.id,
+        dealId: deal.id,
+      }
+    );
 
+    alert(response.data.message);
+  } catch (error: any) {
+    alert(
+      error.response?.data?.message ||
+      "Failed to claim deal."
+    );
+  }
+};
   if (!deal) {
     return (
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
@@ -67,9 +84,12 @@ function DealDetail() {
 
         </div>
 
-        <button className="mt-10 w-full rounded-xl bg-green-600 py-3 font-semibold hover:bg-green-700">
-          Claim Deal
-        </button>
+       <button
+  onClick={handleClaimDeal}
+  className="mt-10 w-full rounded-xl bg-green-600 py-3 font-semibold hover:bg-green-700"
+>
+  Claim Deal
+</button>
 
       </div>
 

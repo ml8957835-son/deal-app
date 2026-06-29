@@ -26,5 +26,13 @@ CREATE TABLE IF NOT EXISTS deals (
   description TEXT NOT NULL
 )
 `).run();
+db.prepare(`
+CREATE TABLE IF NOT EXISTS claims (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    dealId INTEGER NOT NULL,
+    claimedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+`).run();
 
 module.exports = db;

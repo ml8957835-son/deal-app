@@ -194,6 +194,43 @@ app.put("/deals/:id", (req, res) => {
     message: "Deal updated successfully!",
   });
 });
+app.post("/claims", (req, res) => {
+  const { userId, dealId } = req.body;
+
+  try {
+    // Check if already claimed
+    const existing = db.prepare(`
+      SELECT * FROM claims
+      WHERE userId = ? AND dealId = ?
+    `).get(userId, dealId);
+
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "Deal already claimed."
+      });
+    }
+
+    // Insert claim
+    db.prepare(`
+      INSERT INTO claims (userId, dealId)
+      VALUES (?, ?)
+    `).run(userId, dealId);
+
+    res.json({
+      success: true,
+      message: "Deal claimed successfully."
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to claim deal."
+    });
+  }
+});
 app.get("/users", (req, res) => {
 const users = db.prepare(`
   SELECT
