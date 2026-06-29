@@ -131,6 +131,16 @@ app.get("/deals", (req, res) => {
     });
   }
 });
+app.delete("/deals/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.prepare("DELETE FROM deals WHERE id = ?").run(id);
+
+  res.json({
+    success: true,
+    message: "Deal deleted successfully!",
+  });
+});
 app.get("/users", (req, res) => {
 const users = db.prepare(`
   SELECT

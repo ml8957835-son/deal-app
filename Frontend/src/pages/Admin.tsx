@@ -48,6 +48,27 @@ const handleAddDeal = async () => {
     alert("Failed to add deal.");
   }
 };
+const handleDeleteDeal = async (id: number) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this deal?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:5000/deals/${id}`
+    );
+
+    alert(response.data.message);
+
+    // Refresh the table
+    fetchDeals();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete deal.");
+  }
+};
 useEffect(() => {
   fetchDeals();
 }, []);
@@ -245,10 +266,11 @@ const fetchDeals = async () => {
         </button>
 
         <button
-          className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-red-400 backdrop-blur hover:border-red-500"
-        >
-          Delete
-        </button>
+  onClick={() => handleDeleteDeal(deal.id)}
+  className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-red-400 backdrop-blur hover:border-red-500"
+>
+  Delete
+</button>
       </td>
     </tr>
   ))}
