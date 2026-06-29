@@ -30,9 +30,12 @@ setDeals(response.data.deals);
         DealHub
       </h1>
 
-      <button className="rounded-xl bg-blue-600 px-5 py-2 font-semibold hover:bg-blue-700">
-        My Claims
-      </button>
+      <button
+  onClick={() => navigate("/my-claims")}
+  className="rounded-xl bg-blue-600 px-5 py-2 font-semibold hover:bg-blue-700"
+>
+  My Claims
+</button>
 
     </div>
   </nav>

@@ -231,6 +231,41 @@ app.post("/claims", (req, res) => {
     });
   }
 });
+app.get("/claims/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const claims = db.prepare(`
+      SELECT
+        claims.id,
+        deals.id AS dealId,
+        deals.title,
+        deals.store,
+        deals.category,
+        deals.discount,
+        deals.description,
+        claims.claimedAt
+      FROM claims
+      JOIN deals
+      ON claims.dealId = deals.id
+      WHERE claims.userId = ?
+      ORDER BY claims.claimedAt DESC
+    `).all(userId);
+
+    res.json({
+      success: true,
+      claims,
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch claims.",
+    });
+  }
+});
 app.get("/users", (req, res) => {
 const users = db.prepare(`
   SELECT
