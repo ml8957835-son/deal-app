@@ -38,13 +38,39 @@ function Admin() {
       {/* Main Content */}
       <main className="flex-1 p-10">
 
-  <h1 className="text-4xl font-bold">
-    Dashboard
-  </h1>
+  {/* Top Navbar */}
+<div className="flex items-center justify-between mb-10">
 
-  <p className="text-slate-400 mt-2">
-    Welcome back, Admin 👋
-  </p>
+  <div>
+    <h1 className="text-4xl font-bold">
+      Dashboard
+    </h1>
+
+    <p className="text-slate-400 mt-2">
+      Welcome back, Admin 👋
+    </p>
+  </div>
+
+  <div className="flex items-center gap-4">
+
+    <button className="rounded-xl bg-slate-900 border border-slate-700 px-4 py-2 hover:bg-slate-800 transition">
+      🔔
+    </button>
+
+    <div className="rounded-xl bg-slate-900 border border-slate-700 px-5 py-2">
+      <p className="font-semibold">Admin</p>
+      <p className="text-sm text-slate-400">
+        Administrator
+      </p>
+    </div>
+
+    <button className="rounded-xl bg-blue-600 px-5 py-2 font-semibold hover:bg-blue-700 transition">
+      Logout
+    </button>
+
+  </div>
+
+</div>
 
   {/* Dashboard Cards */}
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
