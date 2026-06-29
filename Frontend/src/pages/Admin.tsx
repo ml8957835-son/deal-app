@@ -1,4 +1,50 @@
+import { useState } from "react";
+import axios from "axios";
+
+
 function Admin() {
+  const [title, setTitle] = useState("");
+const [store, setStore] = useState("");
+const [category, setCategory] = useState("");
+const [discount, setDiscount] = useState("");
+const [description, setDescription] = useState("");
+const handleAddDeal = async () => {
+  if (
+    !title ||
+    !store ||
+    !category ||
+    !discount ||
+    !description
+  ) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/deals",
+      {
+        title,
+        store,
+        category,
+        discount,
+        description,
+      }
+    );
+
+    alert(response.data.message);
+
+    // Clear the form
+    setTitle("");
+    setStore("");
+    setCategory("");
+    setDiscount("");
+    setDescription("");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to add deal.");
+  }
+};
   return (
     <div className="min-h-screen bg-slate-950 text-white flex">
 
@@ -101,42 +147,52 @@ function Admin() {
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
     <input
-      type="text"
-      placeholder="Deal Title"
-      className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
+  type="text"
+  placeholder="Deal Title"
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
+  className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
 
     <input
-      type="number"
-      placeholder="Discount"
-      className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
+  type="text"
+  placeholder="Discount"
+  value={discount}
+  onChange={(e) => setDiscount(e.target.value)}
+  className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+    <input
+  type="text"
+  placeholder="Store Name"
+  value={store}
+  onChange={(e) => setStore(e.target.value)}
+  className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
 
     <input
-      type="text"
-      placeholder="Store Name"
-      className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-
-    <input
-      type="text"
-      placeholder="Category"
-      className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
+  type="text"
+  placeholder="Category"
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+  className="rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
 
   </div>
 
   <textarea
-    placeholder="Deal Description"
-    rows={5}
-    className="mt-6 w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
+  placeholder="Deal Description"
+  rows={5}
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+  className="mt-6 w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
 
-  <button
-    className="mt-6 rounded-xl bg-blue-600 px-8 py-3 font-semibold hover:bg-blue-700 transition"
-  >
-    Add Deal
-  </button>
+ <button
+  onClick={handleAddDeal}
+  className="mt-6 rounded-xl bg-blue-600 px-8 py-3 font-semibold hover:bg-blue-700 transition"
+>
+  Add Deal
+</button>
 
 </div>
 {/* Current Deals */}
