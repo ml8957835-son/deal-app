@@ -20,8 +20,10 @@ db.prepare(`
 CREATE TABLE IF NOT EXISTS deals (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
-  description TEXT NOT NULL,
-  price REAL NOT NULL
+  store TEXT NOT NULL,
+  category TEXT NOT NULL,
+  discount TEXT NOT NULL,
+  description TEXT NOT NULL
 )
 `).run();
 

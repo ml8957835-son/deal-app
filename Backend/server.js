@@ -55,6 +55,82 @@ stmt.run(
     });
   }
 });
+// =======================
+// Add Deal Route
+// =======================
+app.post("/deals", (req, res) => {
+  const {
+    title,
+    store,
+    category,
+    discount,
+    description,
+  } = req.body;
+
+  // Check if all fields are filled
+  if (
+    !title ||
+    !store ||
+    !category ||
+    !discount ||
+    !description
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Please fill all fields.",
+    });
+  }
+
+  try {
+    const stmt = db.prepare(`
+      INSERT INTO deals
+      (title, store, category, discount, description)
+      VALUES (?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      title,
+      store,
+      category,
+      discount,
+      description
+    );
+
+    res.json({
+      success: true,
+      message: "Deal added successfully!",
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to add deal.",
+    });
+  }
+});
+// Get All Deals
+app.get("/deals", (req, res) => {
+  try {
+    const deals = db.prepare(`
+      SELECT * FROM deals
+      ORDER BY id DESC
+    `).all();
+
+    res.json({
+      success: true,
+      deals,
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch deals.",
+    });
+  }
+});
 app.get("/users", (req, res) => {
 const users = db.prepare(`
   SELECT

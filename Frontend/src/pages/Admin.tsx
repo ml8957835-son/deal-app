@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 
@@ -8,6 +8,7 @@ const [store, setStore] = useState("");
 const [category, setCategory] = useState("");
 const [discount, setDiscount] = useState("");
 const [description, setDescription] = useState("");
+const [deals, setDeals] = useState([]);
 const handleAddDeal = async () => {
   if (
     !title ||
@@ -33,6 +34,8 @@ const handleAddDeal = async () => {
     );
 
     alert(response.data.message);
+    await fetchDeals();
+
 
     // Clear the form
     setTitle("");
@@ -43,6 +46,18 @@ const handleAddDeal = async () => {
   } catch (error) {
     console.error(error);
     alert("Failed to add deal.");
+  }
+};
+useEffect(() => {
+  fetchDeals();
+}, []);
+
+const fetchDeals = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/deals");
+    setDeals(response.data.deals);
+  } catch (error) {
+    console.error(error);
   }
 };
   return (
@@ -215,32 +230,29 @@ const handleAddDeal = async () => {
     </thead>
 
     <tbody>
+  {deals.map((deal: any) => (
+    <tr key={deal.id} className="border-b border-slate-800">
+      <td className="py-4">{deal.title}</td>
+      <td>{deal.store}</td>
+      <td>{deal.category}</td>
+      <td>{deal.discount}</td>
 
-      <tr className="border-b border-slate-800">
-        <td className="py-4">Sample Deal</td>
-        <td>Amazon</td>
-        <td>Electronics</td>
-        <td>40%</td>
+      <td className="space-x-2">
+        <button
+          className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-blue-400 backdrop-blur hover:border-blue-500"
+        >
+          Edit
+        </button>
 
-        <td className="space-x-2">
-
-          <button
-  className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-blue-400 backdrop-blur hover:border-blue-500"
->
-  Edit
-</button>
-
-<button
-  className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-red-400 backdrop-blur hover:border-red-500"
->
-  Delete
-</button>
-
-        </td>
-
-      </tr>
-
-    </tbody>
+        <button
+          className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-red-400 backdrop-blur hover:border-red-500"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
 
   </table>
 
