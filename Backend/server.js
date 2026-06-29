@@ -56,8 +56,15 @@ stmt.run(
   }
 });
 app.get("/users", (req, res) => {
-  const users = db.prepare("SELECT * FROM users").all();
-  res.json(users);
+const users = db.prepare(`
+  SELECT
+    id,
+    fullName,
+    email,
+    username,
+    role
+  FROM users
+`).all();  res.json(users);
 });
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
