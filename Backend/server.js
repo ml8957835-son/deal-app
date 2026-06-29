@@ -141,6 +141,40 @@ app.delete("/deals/:id", (req, res) => {
     message: "Deal deleted successfully!",
   });
 });
+app.put("/deals/:id", (req, res) => {
+  const { id } = req.params;
+
+  const {
+    title,
+    store,
+    category,
+    discount,
+    description,
+  } = req.body;
+
+  db.prepare(`
+    UPDATE deals
+    SET
+      title = ?,
+      store = ?,
+      category = ?,
+      discount = ?,
+      description = ?
+    WHERE id = ?
+  `).run(
+    title,
+    store,
+    category,
+    discount,
+    description,
+    id
+  );
+
+  res.json({
+    success: true,
+    message: "Deal updated successfully!",
+  });
+});
 app.get("/users", (req, res) => {
 const users = db.prepare(`
   SELECT

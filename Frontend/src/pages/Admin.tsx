@@ -9,6 +9,7 @@ const [category, setCategory] = useState("");
 const [discount, setDiscount] = useState("");
 const [description, setDescription] = useState("");
 const [deals, setDeals] = useState([]);
+const [editingId, setEditingId] = useState<number | null>(null);
 const handleAddDeal = async () => {
   if (
     !title ||
@@ -16,28 +17,47 @@ const handleAddDeal = async () => {
     !category ||
     !discount ||
     !description
-  ) {
+    ) {
     alert("Please fill all fields.");
     return;
   }
 
   try {
-    const response = await axios.post(
-      "http://localhost:5000/deals",
-      {
-        title,
-        store,
-        category,
-        discount,
-        description,
-      }
-    );
+    if (editingId === null) {
+  const response = await axios.post(
+    "http://localhost:5000/deals",
+    {
+      title,
+      store,
+      category,
+      discount,
+      description,
+    }
+  );
 
-    alert(response.data.message);
+  alert(response.data.message);
+} else {
+  const response = await axios.put(
+    `http://localhost:5000/deals/${editingId}`,
+    {
+      title,
+      store,
+      category,
+      discount,
+      description,
+    }
+  );
+
+  alert(response.data.message);
+
+  setEditingId(null);
+}
+
     await fetchDeals();
 
 
     // Clear the form
+    fetchDeals();
     setTitle("");
     setStore("");
     setCategory("");
@@ -68,6 +88,15 @@ const handleDeleteDeal = async (id: number) => {
     console.error(error);
     alert("Failed to delete deal.");
   }
+};
+const handleEditDeal = (deal: any) => {
+  setEditingId(deal.id);
+
+  setTitle(deal.title);
+  setStore(deal.store);
+  setCategory(deal.category);
+  setDiscount(deal.discount);
+  setDescription(deal.description);
 };
 useEffect(() => {
   fetchDeals();
@@ -260,6 +289,7 @@ const fetchDeals = async () => {
 
       <td className="space-x-2">
         <button
+          onClick={() => handleEditDeal(deal)}
           className="rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-blue-400 backdrop-blur hover:border-blue-500"
         >
           Edit

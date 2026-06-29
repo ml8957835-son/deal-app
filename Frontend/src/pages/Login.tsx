@@ -8,23 +8,32 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    try {
-      const response = await axios.post("http://localhost:5000/login", {
-        username,
-        password,
-      });
+  try {
+    const response = await axios.post("http://localhost:5000/login", {
+      username,
+      password,
+    });
+    console.log(response.data);
+    
+    alert(response.data.message);
 
-      alert(response.data.message);
+    localStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
 
-      // Temporary navigation
+    if (response.data.user.role === "admin") {
+      navigate("/admin");
+    } else {
       navigate("/");
-    } catch (error: any) {
-      alert(error.response?.data?.message || "Login failed");
     }
-  };
+  } catch (error: any) {
+    alert(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
